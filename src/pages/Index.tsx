@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import Icon from '@/components/ui/icon';
 
 const wishes = [
   "💖 Пусть этот день принесёт тебе радость!",
@@ -22,7 +21,7 @@ const wishes = [
 
 const Index = () => {
   const [currentWish, setCurrentWish] = useState<string>('');
-  const [sparkles, setSparkles] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [sparkles, setSparkles] = useState<Array<{ id: number; x: number; y: number; rotation: number; delay: number }>>([]);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const playSound = () => {
@@ -50,111 +49,168 @@ const Index = () => {
     const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
     setCurrentWish(randomWish);
     
-    const newSparkles = Array.from({ length: 12 }, (_, i) => ({
+    const newSparkles = Array.from({ length: 20 }, (_, i) => ({
       id: Date.now() + i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
+      x: 50 + (Math.random() - 0.5) * 60,
+      y: 50 + (Math.random() - 0.5) * 60,
+      rotation: Math.random() * 360,
+      delay: Math.random() * 0.2,
     }));
     setSparkles(newSparkles);
     
     setTimeout(() => {
       setSparkles([]);
       setIsAnimating(false);
-    }, 1000);
+    }, 1200);
   };
 
-  useEffect(() => {
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((star, index) => {
-      setTimeout(() => {
-        (star as HTMLElement).style.animationDelay = `${index * 0.2}s`;
-      }, index * 100);
-    });
-  }, []);
-
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-pink-400">
-      <div className="absolute inset-0 opacity-30">
-        {Array.from({ length: 50 }).map((_, i) => (
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500">
+      <div className="absolute inset-0">
+        {Array.from({ length: 80 }).map((_, i) => (
           <div
             key={i}
-            className="star absolute text-yellow-300 animate-sparkle"
+            className="absolute"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 20 + 10}px`,
+              animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`,
               animationDelay: `${Math.random() * 3}s`,
             }}
           >
-            ✨
+            <div 
+              className="w-2 h-2 rotate-45"
+              style={{
+                background: 'linear-gradient(135deg, #FFD700 0%, #FFF 50%, #FFD700 100%)',
+                boxShadow: '0 0 8px rgba(255, 215, 0, 0.8)',
+                transform: `rotate(${Math.random() * 360}deg)`,
+              }}
+            />
           </div>
         ))}
       </div>
 
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
-        <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 animate-float drop-shadow-2xl text-center" 
-            style={{ 
-              fontFamily: 'Comic Sans MS, cursive',
-              textShadow: '0 0 20px rgba(255,105,180,0.8), 0 0 40px rgba(217,70,239,0.6)'
-            }}>
-          💝 Пожелание дня 💝
+        <h1 
+          className="text-6xl md:text-8xl font-bold text-white mb-16 animate-float drop-shadow-2xl text-center px-4" 
+          style={{ 
+            fontFamily: 'Pacifico, cursive',
+            textShadow: '0 0 30px rgba(255,105,180,1), 0 0 60px rgba(217,70,239,0.8), 4px 4px 8px rgba(0,0,0,0.3)',
+            letterSpacing: '0.05em'
+          }}
+        >
+          Пожелание дня
         </h1>
 
-        <div className="mb-12 relative">
+        <div className="mb-16 relative">
           <Button
             onClick={generateWish}
             disabled={isAnimating}
-            className="w-64 h-64 rounded-full bg-gradient-to-br from-pink-500 via-pink-400 to-pink-300 hover:from-pink-600 hover:via-pink-500 hover:to-pink-400 border-8 border-white shadow-2xl animate-pulse-glow transition-all duration-300 hover:scale-110 relative overflow-hidden"
+            className="group relative w-72 h-72 p-0 border-none overflow-visible bg-transparent hover:bg-transparent transition-all duration-300"
             style={{
-              background: 'linear-gradient(135deg, #ff1493 0%, #ff69b4 50%, #ffb6c1 100%)',
+              filter: 'drop-shadow(0 20px 40px rgba(255,20,147,0.5))',
             }}
           >
-            <Icon name="Heart" size={120} className="text-white drop-shadow-xl" />
+            <svg 
+              viewBox="0 0 24 24" 
+              className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+              style={{
+                filter: 'drop-shadow(0 0 20px rgba(255,105,180,0.8))',
+              }}
+            >
+              <defs>
+                <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#ff1493', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#ff69b4', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#ffb6c1', stopOpacity: 1 }} />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <path 
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" 
+                fill="url(#heartGradient)"
+                stroke="#fff"
+                strokeWidth="0.5"
+                filter="url(#glow)"
+                className="animate-pulse-glow"
+              />
+            </svg>
             
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-shimmer" 
-                 style={{ backgroundSize: '1000px 100%' }} />
+            <div 
+              className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{
+                background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
+                animation: 'shimmer 2s linear infinite',
+              }}
+            />
           </Button>
 
           {sparkles.map((sparkle) => (
             <div
               key={sparkle.id}
-              className="absolute text-4xl animate-sparkle pointer-events-none"
+              className="absolute pointer-events-none"
               style={{
                 left: `${sparkle.x}%`,
                 top: `${sparkle.y}%`,
+                animation: `sparkle 1s ease-out forwards`,
+                animationDelay: `${sparkle.delay}s`,
               }}
             >
-              ✨
+              <div 
+                className="w-6 h-6"
+                style={{
+                  background: 'linear-gradient(45deg, #FFD700 0%, #FFF 50%, #FFD700 100%)',
+                  transform: `rotate(${sparkle.rotation}deg)`,
+                  clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                  boxShadow: '0 0 15px rgba(255, 215, 0, 1)',
+                }}
+              />
             </div>
           ))}
         </div>
 
         {currentWish && (
           <div className="max-w-2xl text-center animate-float">
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-4 border-pink-300"
-                 style={{
-                   boxShadow: '0 0 40px rgba(255,105,180,0.5), 0 20px 60px rgba(0,0,0,0.2)'
-                 }}>
-              <p className="text-3xl md:text-4xl font-bold text-pink-600 leading-relaxed"
-                 style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+            <div 
+              className="bg-white/95 backdrop-blur-sm rounded-[2rem] p-10 border-4"
+              style={{
+                borderImage: 'linear-gradient(135deg, #FFD700, #ff69b4, #d946ef, #FFD700) 1',
+                boxShadow: '0 0 60px rgba(255,105,180,0.6), 0 25px 70px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,215,0,0.1)',
+              }}
+            >
+              <p 
+                className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-relaxed"
+                style={{ 
+                  fontFamily: 'Chewy, cursive',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                }}
+              >
                 {currentWish}
               </p>
             </div>
           </div>
         )}
 
-        <div className="mt-12 text-center">
-          <p className="text-2xl text-white font-bold drop-shadow-lg"
-             style={{ 
-               fontFamily: 'Comic Sans MS, cursive',
-               textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-             }}>
+        <div className="mt-16 text-center">
+          <p 
+            className="text-3xl text-white font-bold drop-shadow-lg animate-pulse"
+            style={{ 
+              fontFamily: 'Caveat, cursive',
+              textShadow: '0 0 20px rgba(255,215,0,0.8), 3px 3px 6px rgba(0,0,0,0.4)',
+            }}
+          >
             Нажми на сердечко! 💖
           </p>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-pink-500/30 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-purple-600/40 to-transparent pointer-events-none" />
     </div>
   );
 };
