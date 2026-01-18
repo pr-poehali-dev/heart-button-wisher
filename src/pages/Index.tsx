@@ -92,7 +92,7 @@ const Index = () => {
 
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
         <h1 
-          className="text-6xl md:text-8xl font-bold text-white mb-16 animate-float drop-shadow-2xl text-center px-4" 
+          className="text-7xl md:text-9xl font-bold text-white mb-12 animate-float drop-shadow-2xl text-center px-4" 
           style={{ 
             fontFamily: 'Pacifico, cursive',
             textShadow: '0 0 30px rgba(255,105,180,1), 0 0 60px rgba(217,70,239,0.8), 4px 4px 8px rgba(0,0,0,0.3)',
@@ -102,18 +102,18 @@ const Index = () => {
           Пожелание дня
         </h1>
 
-        <div className="mb-16 relative">
+        <div className="mb-12 relative">
           <Button
             onClick={generateWish}
             disabled={isAnimating}
-            className="group relative w-72 h-72 p-0 border-none overflow-visible bg-transparent hover:bg-transparent transition-all duration-300"
+            className="group relative w-96 h-96 md:w-[28rem] md:h-[28rem] p-0 border-none overflow-visible bg-transparent hover:bg-transparent transition-all duration-300"
             style={{
-              filter: 'drop-shadow(0 20px 40px rgba(255,20,147,0.5))',
+              filter: 'drop-shadow(0 25px 50px rgba(255,20,147,0.6))',
             }}
           >
             <svg 
               viewBox="0 0 24 24" 
-              className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full transition-transform duration-300 group-hover:scale-105"
               style={{
                 filter: 'drop-shadow(0 0 20px rgba(255,105,180,0.8))',
               }}
@@ -187,7 +187,7 @@ const Index = () => {
               <p 
                 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-relaxed"
                 style={{ 
-                  fontFamily: 'Chewy, cursive',
+                  fontFamily: 'Pacifico, cursive',
                   textShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 }}
               >
@@ -199,9 +199,9 @@ const Index = () => {
 
         <div className="mt-16 text-center">
           <p 
-            className="text-3xl text-white font-bold drop-shadow-lg animate-pulse"
+            className="text-4xl text-white font-bold drop-shadow-lg animate-pulse"
             style={{ 
-              fontFamily: 'Caveat, cursive',
+              fontFamily: 'Pacifico, cursive',
               textShadow: '0 0 20px rgba(255,215,0,0.8), 3px 3px 6px rgba(0,0,0,0.4)',
             }}
           >
